@@ -1,0 +1,13 @@
+on:
+  push:
+    branches:
+    - master
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: pull-request
+      uses: yellowmegaman/prtrigger@v0.8
+      with:
+        github_token: ${{ secrets.PERSONAL_TOKEN }}
