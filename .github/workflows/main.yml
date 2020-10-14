@@ -1,15 +1,25 @@
+
 name: deploy website
-on: [pull_request]
+on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: amondnet/vercel-action@v19
+      - name: Use Node.js
+        uses: actions/setup-node@v1
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
-          vercel-args: '--prod' #Optional
-          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
-          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
-          working-directory: ./sub-directory
+          node-version: "12.x"
+      - name: Install dependencies
+        run: yarn
+      - uses: xmflsct/action-vercel-deployment@v0.5.3
+        with:
+          vercelToken: ${{ secrets.VERCEL_TOKEN }}
+          vercelOrgId: ${{ secrets.VERCEL_ORG_ID }}
+          vercelProjectId: ${{ secrets.VERCEL_PROJECT_ID }}
+          githubToken: ${{ secrets.PAT }}
+          sourceDirectory: "src"
+          assignDomain: "preview.example.com"
+        env:
+          YOUR_ENV_1: ${{ secrets.YOUR_ENV_1 }}
+          YOUR_ENV_2: ${{ secrets.YOUR_ENV_2 }}
